@@ -15,14 +15,13 @@ export default function ProductDetail(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [cartQty, setCartQty] = useState(0);
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`/api/products/${id}`);
+        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
         if (!response.ok) throw new Error("Product not found");
         const data = await response.json();
 
@@ -44,16 +43,20 @@ export default function ProductDetail(props) {
     }
   }, [id, getItemQuantity]);
 
+  useEffect(() => {
+    if (product && getItemQuantity) {
+      setCartQty(getItemQuantity(product.id));
+    }
+  }, [product, getItemQuantity]);
+
   const handleAddToCart = () => {
     if (product) {
       for (let i = 0; i < quantity; i++) {
-        onAddToCart(product);
+        onAddToCart(product); 
       }
       if (getItemQuantity) {
-        setCartQty(getItemQuantity(product.id));
+        setCartQty(getItemQuantity(product.id) + quantity);
       }
-      setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 2000);
     }
   };
 
@@ -186,7 +189,7 @@ export default function ProductDetail(props) {
                       >
                         −
                       </Button>
-                      <span className="text-2xl font-bold text-[#3A3A3A] w-12 text-center]">
+                      <span className="text-2xl font-bold text-[#3A3A3A] w-12 text-center">
                         {quantity}
                       </span>
                       <Button
@@ -205,7 +208,7 @@ export default function ProductDetail(props) {
                     onClick={handleAddToCart}
                   >
                     <FiShoppingCart size={18} />
-                    {addedToCart ? "Added to Cart!" : "Add to Cart"}
+                    {"Add to Cart"}
                     {cartQty > 0 && (
                       <span className="absolute -top-[8px] -right-[8px] h-[24px] w-[24px] inline-flex items-center justify-center text-xs font-bold rounded-full bg-[#DC2626] text-white">
                         {cartQty}
@@ -213,7 +216,7 @@ export default function ProductDetail(props) {
                     )}
                   </Button>
 
-                  {addedToCart && (
+                  {cartQty > 0 && (
                     <Button
                       variant="secondary"
                       className="w-full mt-[16px]"

@@ -68,7 +68,7 @@ export default function Index(props) {
             {/* badge */}
             {cartItemCount > 0 && (
               <span
-                className="absolute h-[25px] w-[25px] -top-[8px] -right-[8px] inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-[#DC2626] text-white"
+                className="absolute h-[25px] min-w-[25px] w-auto -top-[8px] -right-[8px] inline-flex items-center justify-center px-2 py-0.5 text-xs font-bold rounded-full bg-[#DC2626] text-white"
                 aria-live="polite"
               >
                 {cartItemCount}
